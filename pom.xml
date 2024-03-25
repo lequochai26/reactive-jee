@@ -49,6 +49,36 @@
         <version>11.0.20</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
+    <dependency>
+        <groupId>jakarta.servlet</groupId>
+        <artifactId>jakarta.servlet-api</artifactId>
+        <version>6.0.0</version>
+        <scope>provided</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/io.reactivex.rxjava3/rxjava -->
+    <dependency>
+        <groupId>io.reactivex.rxjava3</groupId>
+        <artifactId>rxjava</artifactId>
+        <version>3.1.8</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/jakarta.websocket/jakarta.websocket-api -->
+    <dependency>
+        <groupId>jakarta.websocket</groupId>
+        <artifactId>jakarta.websocket-api</artifactId>
+        <version>2.1.1</version>
+        <scope>provided</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.eclipse.jetty.websocket/websocket-jakarta-server -->
+    <dependency>
+        <groupId>org.eclipse.jetty.websocket</groupId>
+        <artifactId>websocket-jakarta-server</artifactId>
+        <version>11.0.20</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
