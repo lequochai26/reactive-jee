@@ -5,6 +5,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -70,12 +71,60 @@ public class EmployeeRestfulApi {
     public Response<Void> insertEmployee(Employee employee) {
         Response<Void> response = new Response<>();
 
+        if (
+            EmployeeContainer
+                .getInstance()
+                .get(
+                    employee.getId()
+                ) != null
+        ) {
+            response.setSuccess(false);
+            response.setMessage("Employee with given id already exist!");
+            response.setCode("EMPLOYEE_ALREADY_EXIST");
+            return response;
+        }
+
         EmployeeContainer
             .getInstance()
             .insert(employee);
         
         response.setSuccess(true);
 
+        return response;
+    }
+
+    @PUT
+    @Path ("/{id}")
+    @Consumes (MediaType.APPLICATION_JSON)
+    @Produces (MediaType.APPLICATION_JSON)
+    public Response<Void> updateEmployee(@PathParam ("id") String idStr, Employee employee) {
+        Response<Void> response = new Response<>();
+
+        int id;
+        try {
+            id = Integer.parseInt(idStr);
+        }
+        catch (Exception e) {
+            response.setSuccess(false);
+            response.setMessage("ID must be an integer!");
+            response.setCode("ID_INVALID");
+            return response;
+        }
+
+        Employee target = EmployeeContainer
+            .getInstance()
+            .get(id);
+
+        if (target == null) {
+            response.setSuccess(false);
+            response.setMessage("Employee with with given id doesn't exist!");
+            response.setCode("EMPLOYEE_NOT_EXIST");
+            return response;
+        }
+
+        target.setName(employee.getName());
+
+        response.setSuccess(true);
         return response;
     }
 
