@@ -2,6 +2,7 @@ package org.lequochai.reactive_jee.models;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import java.util.ArrayList;
@@ -22,12 +23,13 @@ public class EmployeeContainer {
 
     // Fields:
     private List<Employee> employees;
+    private Disposable generateEmployeesDisposable;
 
     // Constructors:
     public EmployeeContainer() {
         employees = new ArrayList<>();
 
-        Flowable.range(0, LIMIT)
+        generateEmployeesDisposable = Flowable.range(0, LIMIT)
         .observeOn(
             Schedulers.computation()
         )
@@ -37,7 +39,12 @@ public class EmployeeContainer {
                     new Employee(id, "Employee " + id)
                 );
                 System.out.println("Added employee with ID: " + id);
-                Thread.sleep(100);
+                
+                try {
+                    Thread.sleep(100);
+                }
+                catch (Exception e) {
+                }
             }
         );
     }
@@ -54,5 +61,11 @@ public class EmployeeContainer {
             }
         }
         return null;
+    }
+
+    public void cancelGenerateEmployees() {
+        if (!generateEmployeesDisposable.isDisposed()) {
+            generateEmployeesDisposable.dispose();
+        }
     }
 }
