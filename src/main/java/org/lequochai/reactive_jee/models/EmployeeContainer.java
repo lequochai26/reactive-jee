@@ -63,6 +63,10 @@ public class EmployeeContainer {
         return null;
     }
 
+    public void insert(Employee employee) {
+        employees.add(employee);
+    }
+
     public void cancelGenerateEmployees() {
         if (!generateEmployeesDisposable.isDisposed()) {
             generateEmployeesDisposable.dispose();

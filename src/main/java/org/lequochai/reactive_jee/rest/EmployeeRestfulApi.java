@@ -1,8 +1,10 @@
 package org.lequochai.reactive_jee.rest;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -58,6 +60,21 @@ public class EmployeeRestfulApi {
                 .getInstance()
                 .get(id)  
         );
+
+        return response;
+    }
+
+    @POST
+    @Consumes (MediaType.APPLICATION_JSON)
+    @Produces (MediaType.APPLICATION_JSON)
+    public Response<Void> insertEmployee(Employee employee) {
+        Response<Void> response = new Response<>();
+
+        EmployeeContainer
+            .getInstance()
+            .insert(employee);
+        
+        response.setSuccess(true);
 
         return response;
     }
