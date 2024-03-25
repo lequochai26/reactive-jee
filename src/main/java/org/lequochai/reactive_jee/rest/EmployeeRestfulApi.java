@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.lequochai.reactive_jee.models.Employee;
 import org.lequochai.reactive_jee.models.EmployeeContainer;
+import org.lequochai.reactive_jee.response.Response;
 
 @Path ("/employee")
 public class EmployeeRestfulApi {
@@ -20,19 +21,34 @@ public class EmployeeRestfulApi {
     // Methods:
     @GET
     @Produces (MediaType.APPLICATION_JSON)
-    public List<Employee> getAllEmployees() {
-        return EmployeeContainer.getInstance()
-            .getAll();
+    public Response<List<Employee>> getAllEmployees() {
+        Response<List<Employee>> response = new Response<>();
+        response.setSuccess(true);
+        response.setResult(
+            EmployeeContainer
+                .getInstance()
+                .getAll()
+        );
+        return response;
     }
 
     @DELETE
     @Path ("/generateEmployees")
-    @Produces (MediaType.TEXT_PLAIN)
-    public String cancelGenerateEmployees() {
-        EmployeeContainer
-            .getInstance()
-            .cancelGenerateEmployees();
+    @Produces (MediaType.APPLICATION_JSON)
+    public Response<Void> cancelGenerateEmployees() {
+        Response<Void> response = new Response<Void>();
         
-        return "DONE";
+        try {
+            EmployeeContainer
+                .getInstance()
+                .cancelGenerateEmployees();
+            
+            response.setSuccess(true);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return response;
     }
 }
