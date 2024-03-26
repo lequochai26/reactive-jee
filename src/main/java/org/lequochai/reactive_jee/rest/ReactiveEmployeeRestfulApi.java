@@ -193,6 +193,7 @@ public class ReactiveEmployeeRestfulApi {
 
     @DELETE
     @Path ("/generateEmployees")
+    @Produces (MediaType.APPLICATION_JSON)
     public Response<Void> cancelGenerateEmployees() {
         Status status = new Status(false);
         Response<Void> response = new Response<>();
