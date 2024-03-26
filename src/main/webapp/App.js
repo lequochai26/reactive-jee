@@ -223,7 +223,7 @@ export default class App {
     }
 
     async _onCancelGenerate() {
-        const response = await fetch("/reactive-jee/rest/employee/generateEmployees",
+        const response = await fetch("/reactive-jee/rest/remployees/generateEmployees",
         {
             method: "DELETE"
         })
