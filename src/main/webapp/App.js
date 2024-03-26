@@ -58,7 +58,7 @@ export default class App {
         }
 
         const response = await fetch(
-            "/reactive-jee/rest/employee",
+            "/reactive-jee/rest/remployees",
             {
                 method: "POST",
                 headers: [
@@ -95,7 +95,7 @@ export default class App {
         }
 
         const response = await fetch(
-            `/reactive-jee/rest/employee/${id}`,
+            `/reactive-jee/rest/remployees`,
             {
                 method: "PUT",
                 headers: [
@@ -125,7 +125,7 @@ export default class App {
 
     async _onDelete(id) {
         const response = await fetch(
-            `/reactive-jee/rest/employee/${id}`,
+            `/reactive-jee/rest/remployees/${id}`,
             {
                 method: "DELETE"
             }
@@ -143,7 +143,7 @@ export default class App {
 
     async _onLoadEmployees() {
         try {
-            const response = await fetch("/reactive-jee/rest/employee");
+            const response = await fetch("/reactive-jee/rest/remployees");
 
             const { result } = await response.json();
 
@@ -163,7 +163,7 @@ export default class App {
         }
 
         const response = await fetch(
-            `/reactive-jee/rest/employee?keyword=${keyword}`
+            `/reactive-jee/rest/remployees?keyword=${keyword}`
         );
 
         const { success, message, result } = await response.json();
