@@ -67,6 +67,15 @@ public class EmployeeContainer {
         employees.add(employee);
     }
 
+    public void delete(int id) {
+        for (Employee employee : employees) {
+            if (employee.getId() == id) {
+                employees.remove(employee);
+                return;
+            }
+        }
+    }
+
     public void cancelGenerateEmployees() {
         if (!generateEmployeesDisposable.isDisposed()) {
             generateEmployeesDisposable.dispose();

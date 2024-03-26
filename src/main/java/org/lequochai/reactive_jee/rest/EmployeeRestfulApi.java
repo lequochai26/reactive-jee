@@ -129,6 +129,42 @@ public class EmployeeRestfulApi {
     }
 
     @DELETE
+    @Path ("/{id}")
+    @Produces (MediaType.APPLICATION_JSON)
+    public Response<Void> deleteEmployee(@PathParam ("id") String idStr) {
+        Response<Void> response = new Response<>();
+
+        int id;
+        try {
+            id = Integer.parseInt(idStr);
+        }
+        catch (Exception e) {
+            response.setSuccess(false);
+            response.setMessage("ID Must be an integer!");
+            response.setCode("ID_INVALID");
+            return response;
+        }
+
+        if (
+            EmployeeContainer
+                .getInstance()
+                .get(id) == null
+        ) {
+            response.setSuccess(false);
+            response.setMessage("Employee with given ID doesn't exist!");
+            response.setCode("EMPLOYEE_NOT_EXIST");
+            return response;
+        }
+
+        EmployeeContainer.getInstance()
+            .delete(id);
+
+        response.setSuccess(true);
+
+        return response;
+    }
+
+    @DELETE
     @Path ("/generateEmployees")
     @Produces (MediaType.APPLICATION_JSON)
     public Response<Void> cancelGenerateEmployees() {
