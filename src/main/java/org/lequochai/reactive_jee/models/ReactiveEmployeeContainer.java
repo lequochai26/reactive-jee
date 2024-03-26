@@ -44,7 +44,7 @@ public class ReactiveEmployeeContainer {
                 System.out.println("Generated Employee " + employee.getId() + " !");
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(Setting.EMPLOYEE_GENERATE_INTERVAL);
                 }
                 catch (Exception e) {
                 }

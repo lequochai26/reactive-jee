@@ -1,6 +1,8 @@
 package org.lequochai.reactive_jee.models;
 import java.util.List;
 
+import org.lequochai.reactive_jee.system.Setting;
+
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -9,7 +11,6 @@ import java.util.ArrayList;
 
 public class EmployeeContainer {
     // Static fields:
-    private static final int LIMIT = 10000;
     private static EmployeeContainer instance;
 
     // Static methods:
@@ -29,7 +30,7 @@ public class EmployeeContainer {
     public EmployeeContainer() {
         employees = new ArrayList<>();
 
-        generateEmployeesDisposable = Flowable.range(0, LIMIT)
+        generateEmployeesDisposable = Flowable.range(0, Setting.EMPLOYEE_GENERATE_MAX)
         .observeOn(
             Schedulers.computation()
         )
@@ -41,7 +42,7 @@ public class EmployeeContainer {
                 System.out.println("Added employee with ID: " + id);
                 
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(Setting.EMPLOYEE_GENERATE_INTERVAL);
                 }
                 catch (Exception e) {
                 }
