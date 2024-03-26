@@ -54,6 +54,24 @@ public class EmployeeContainer {
         return this.employees;
     }
 
+    public List<Employee> get(String keyword) {
+        List<Employee> result = new ArrayList<>();
+
+        for (Employee employee : employees) {
+            if (
+                employee.toString()
+                    .toLowerCase()
+                    .contains(
+                        keyword.toLowerCase()
+                    )
+            ) {
+                result.add(employee);
+            }
+        }
+
+        return result;
+    }
+
     public Employee get(int id) {
         for (Employee employee : this.employees) {
             if (employee.getId() == id) {

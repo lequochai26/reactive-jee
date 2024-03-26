@@ -14,6 +14,12 @@ public class Employee {
         this.name = name;
     }
 
+    // Methods:
+    @Override
+    public String toString() {
+        return "Employee [id=" + id + ", name=" + name + "]";
+    }
+
     // Getters / setters:
     public int getId() {
         return id;
