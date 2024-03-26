@@ -22,6 +22,12 @@ export default class App {
                 "click",
                 this._onLoadEmployees.bind(this)
             );
+
+        this._searchForm.querySelector("#btnSearch")
+            .addEventListener(
+                "click",
+                this._onSearch.bind(this)
+            );
         
         this._searchForm.querySelector("#btnCancelGenerate")
             .addEventListener(
@@ -145,6 +151,28 @@ export default class App {
         }
         catch (error) {
             console.error(error);
+        }
+    }
+
+    async _onSearch() {
+        const keyword = this._searchForm.querySelector("#txtKeyword").value;
+
+        if (keyword === '') {
+            alert("Keyword can't be empty!");
+            return;
+        }
+
+        const response = await fetch(
+            `/reactive-jee/rest/employee?keyword=${keyword}`
+        );
+
+        const { success, message, result } = await response.json();
+
+        if (success) {
+            this._showEmployees(result);
+        }
+        else {
+            alert(message);
         }
     }
 
