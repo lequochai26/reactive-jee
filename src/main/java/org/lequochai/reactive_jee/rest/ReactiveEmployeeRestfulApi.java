@@ -17,8 +17,6 @@ import org.lequochai.reactive_jee.models.Employee;
 import org.lequochai.reactive_jee.models.ReactiveEmployeeContainer;
 import org.lequochai.reactive_jee.response.Response;
 
-import io.reactivex.rxjava3.core.Single;
-
 @Path ("/remployees")
 public class ReactiveEmployeeRestfulApi {
     
@@ -26,34 +24,37 @@ public class ReactiveEmployeeRestfulApi {
     @Produces (MediaType.APPLICATION_JSON)
     public Response<List<Employee>> getEmployees(@QueryParam ("keyword") String keyword) {
         Response<List<Employee>> response = new Response<>();
-        Status status = new Status(false);
 
-        Single<List<Employee>> single = null;
         if (keyword == null) {
-            single = ReactiveEmployeeContainer
+            ReactiveEmployeeContainer
                 .getInstance()
-                .getAll();
+                .getAll()
+                .blockingSubscribe(
+                    r -> {
+                        response.setSuccess(true);
+                        response.setResult(r);
+                    },
+                    e -> {
+                        response.setSuccess(false);
+                        response.setMessage(e.getMessage());
+                    }
+                );
         }
         else {
-            single = ReactiveEmployeeContainer
+            ReactiveEmployeeContainer
                 .getInstance()
-                .get(keyword);
+                .get(keyword)
+                .blockingSubscribe(
+                    r -> {
+                        response.setSuccess(true);
+                        response.setResult(r);
+                    },
+                    e -> {
+                        response.setSuccess(false);
+                        response.setMessage(e.getMessage());
+                    }
+                );
         }
-
-        single.subscribe(
-            r -> {
-                response.setResult(r);
-                response.setSuccess(true);
-                status.setDone(true);
-            },
-            t -> {
-                response.setSuccess(false);
-                response.setMessage(t.getMessage());
-                status.setDone(true);
-            }
-        );
-
-        while (!status.isDone()) {}
 
         return response;
     }
@@ -62,7 +63,6 @@ public class ReactiveEmployeeRestfulApi {
     @Path ("/{id}")
     @Produces (MediaType.APPLICATION_JSON)
     public Response<Employee> getEmployee(@PathParam ("id") String idStr) {
-        Status status = new Status(false);
         Response<Employee> response = new Response<>();
 
         int id;
@@ -78,24 +78,16 @@ public class ReactiveEmployeeRestfulApi {
         ReactiveEmployeeContainer
             .getInstance()
             .get(id)
-            .subscribe(
-                target -> {
+            .blockingSubscribe(
+                r -> {
                     response.setSuccess(true);
-                    response.setResult(target);
-                    status.setDone(true);
+                    response.setResult(r);
                 },
-                t -> {
+                e -> {
                     response.setSuccess(false);
-                    response.setMessage(t.getMessage());
-                    status.setDone(true);
-                },
-                () -> {
-                    response.setSuccess(true);
-                    status.setDone(true);
+                    response.setMessage(e.getMessage());
                 }
             );
-
-        while (!status.isDone()) {}
 
         return response;
     }
@@ -104,25 +96,20 @@ public class ReactiveEmployeeRestfulApi {
     @Consumes (MediaType.APPLICATION_JSON)
     @Produces (MediaType.APPLICATION_JSON)
     public Response<Void> insertEmployee(Employee employee) {
-        Status status = new Status(false);
         Response<Void> response = new Response<>();
 
         ReactiveEmployeeContainer
             .getInstance()
             .insert(employee)
-            .subscribe(
+            .blockingSubscribe(
                 r -> {
                     response.setSuccess(true);
-                    status.setDone(true);
                 },
-                t -> {
+                e -> {
                     response.setSuccess(false);
-                    response.setMessage(t.getMessage());
-                    status.setDone(true);
+                    response.setMessage(e.getMessage());
                 }
             );
-
-        while (!status.isDone()) {}
 
         return response;
     }
@@ -131,25 +118,20 @@ public class ReactiveEmployeeRestfulApi {
     @Consumes (MediaType.APPLICATION_JSON)
     @Produces (MediaType.APPLICATION_JSON)
     public Response<Void> updateEmployee(Employee employee) {
-        Status status = new Status(false);
         Response<Void> response = new Response<>();
 
         ReactiveEmployeeContainer
             .getInstance()
             .update(employee)
-            .subscribe(
+            .blockingSubscribe(
                 r -> {
                     response.setSuccess(true);
-                    status.setDone(true);
                 },
-                t -> {
+                e -> {
                     response.setSuccess(false);
-                    response.setMessage(t.getMessage());
-                    status.setDone(true);
+                    response.setMessage(e.getMessage());
                 }
             );
-
-        while (!status.isDone()) {}
 
         return response;
     }
@@ -158,7 +140,6 @@ public class ReactiveEmployeeRestfulApi {
     @Path ("/${id}")
     @Produces (MediaType.APPLICATION_JSON)
     public Response<Void> deleteEmployee(@PathParam ("id") String idStr) {
-        Status status = new Status(false);
         Response<Void> response = new Response<>();
 
         int id;
@@ -174,19 +155,15 @@ public class ReactiveEmployeeRestfulApi {
         ReactiveEmployeeContainer
             .getInstance()
             .delete(id)
-            .subscribe(
+            .blockingSubscribe(
                 r -> {
                     response.setSuccess(true);
-                    status.setDone(true);
                 },
-                t -> {
+                e -> {
                     response.setSuccess(false);
-                    response.setMessage(t.getMessage());
-                    status.setDone(true);
+                    response.setMessage(e.getMessage());
                 }
             );
-
-        while (!status.isDone()) {}
 
         return response;
     }
@@ -195,46 +172,21 @@ public class ReactiveEmployeeRestfulApi {
     @Path ("/generateEmployees")
     @Produces (MediaType.APPLICATION_JSON)
     public Response<Void> cancelGenerateEmployees() {
-        Status status = new Status(false);
         Response<Void> response = new Response<>();
 
         ReactiveEmployeeContainer
             .getInstance()
             .cancelGenerateEmployees()
-            .subscribe(
+            .blockingSubscribe(
                 r -> {
                     response.setSuccess(true);
-                    status.setDone(true);
                 },
-                t -> {
+                e -> {
                     response.setSuccess(false);
-                    response.setMessage(t.getMessage());
-                    status.setDone(true);
+                    response.setMessage(e.getMessage());
                 }
             );
 
-        while (!status.isDone()) {}
-
         return response;
-    }
-
-    // Inner classes:
-    public class Status {
-        private boolean done;
-
-        public Status() {
-        }
-
-        public Status(boolean done) {
-            this.done = done;
-        }
-
-        public boolean isDone() {
-            return done;
-        }
-
-        public void setDone(boolean done) {
-            this.done = done;
-        }
     }
 }

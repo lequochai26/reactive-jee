@@ -33,7 +33,7 @@ public class ReactiveEmployeeContainer {
         employees = new ArrayList<>();
 
         generateEmployeesDisposable = Observable.range(0, Setting.EMPLOYEE_GENERATE_MAX)
-        .observeOn(Schedulers.computation())
+        .observeOn(Schedulers.io())
         .map(
             id -> new Employee(id, "Employee " + id)
         )
@@ -55,7 +55,7 @@ public class ReactiveEmployeeContainer {
     // Methods:
     public Single<List<Employee>> getAll() {
         return Single.just(employees)
-            .observeOn(Schedulers.computation());
+            .observeOn(Schedulers.io());
     }
 
     public Single<List<Employee>> get(String keyword) {
@@ -80,7 +80,7 @@ public class ReactiveEmployeeContainer {
                 return result;
             }
         )
-        .observeOn(Schedulers.computation());
+        .observeOn(Schedulers.io());
     }
 
     public Maybe<Employee> get(int id) {
@@ -95,7 +95,7 @@ public class ReactiveEmployeeContainer {
                 return null;
             }
         )
-        .observeOn(Schedulers.computation());
+        .observeOn(Schedulers.io());
     }
 
     public Maybe<Boolean> insert(Employee employee) {
@@ -113,7 +113,7 @@ public class ReactiveEmployeeContainer {
                 return true;
             }
         )
-        .observeOn(Schedulers.computation());
+        .observeOn(Schedulers.io());
     }
 
     public Maybe<Boolean> update(Employee employee) {
@@ -130,7 +130,7 @@ public class ReactiveEmployeeContainer {
                 return true;
             }
         )
-        .observeOn(Schedulers.computation());
+        .observeOn(Schedulers.io());
     }
 
     public Maybe<Boolean> delete(int id) {
@@ -147,11 +147,11 @@ public class ReactiveEmployeeContainer {
                 return true;
             }
         )
-        .observeOn(Schedulers.computation());
+        .observeOn(Schedulers.io());
     }
 
-    public Maybe<Boolean> cancelGenerateEmployees() {
-        return Maybe.fromSupplier(
+    public Single<Boolean> cancelGenerateEmployees() {
+        return Single.fromSupplier(
             () -> {
                 if (!generateEmployeesDisposable.isDisposed()) {
                     generateEmployeesDisposable.dispose();
@@ -161,7 +161,7 @@ public class ReactiveEmployeeContainer {
             }
         )
         .observeOn(
-            Schedulers.computation()
+            Schedulers.io()
         );
     }
 }
