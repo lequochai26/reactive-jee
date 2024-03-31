@@ -137,7 +137,7 @@ public class ReactiveEmployeeRestfulApi {
     }
 
     @DELETE
-    @Path ("/${id}")
+    @Path ("/{id}")
     @Produces (MediaType.APPLICATION_JSON)
     public Response<Void> deleteEmployee(@PathParam ("id") String idStr) {
         Response<Void> response = new Response<>();
